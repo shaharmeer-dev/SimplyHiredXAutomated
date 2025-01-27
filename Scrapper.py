@@ -94,9 +94,9 @@ class Scrapper:
 
                 page_data = {
                     "link": job_link,
-                    "desc": job_description,
                     "company_name": company_name,
                     "job_title": job_title,
+                    "desc": job_description,
                     "job_type": job_type,
                     "compensation": compensation,
                     "posted_time": posted_time,
@@ -144,20 +144,20 @@ class Scrapper:
             self.driver.find_element(By.XPATH, "(//button[@data-testid='dropdown-option'])[2]").click()
             self.random_sleep()
 
-            # Extract pagination links
-            ls = ['',]
-            i = 1
 
             pagination_links = self.driver.find_elements(By.XPATH, "//nav[@role='navigation' and @aria-label='pagination']//a[contains(@class, 'chakra-link')]")
 
             # Ensure output directory exists
             os.makedirs("Output", exist_ok=True)
+            # Extract pagination links
+            ls = ['',]
+            i = 1
 
             # Loop through pages and scrape data
             for link in pagination_links:
                 if link.text:
                     ls.append(link.get_attribute('href'))
-            ls
+            
             for j in ls:
                 try:
 
