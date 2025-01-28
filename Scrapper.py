@@ -56,39 +56,39 @@ class Scrapper:
                     job_type = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobDetailsJobType']//span[@data-testid='detailText']").text
                 except Exception as e:
                     job_type = None
-                    print(f"Error retrieving job type for job {i + 1} ")
+                    print(f"No job type for job {i + 1} ")
 
                 try:
                     compensation = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobCompensation']//span[@data-testid='detailText']").text
                 except Exception as e:
                     compensation = None
-                    print(f"Error retrieving compensation for job {i + 1} ")
+                    print(f"No compensation for job {i + 1} ")
 
                 try:
                     posted_time = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobPostingTimestamp']//span[@data-testid='detailText']").text
                 except Exception as e:
                     posted_time = None
-                    print(f"Error retrieving posted time for job {i + 1} ")
+                    print(f"No posted time for job {i + 1} ")
 
                 try:
                     qualifications = self.driver.find_elements(By.XPATH, "//ul[@class='chakra-wrap__list css-19lo6pj']//li[@class='chakra-wrap__listitem css-1yp4ln']//span[@data-testid='viewJobQualificationItem']")
                     qualifications = [qualification.text for qualification in qualifications]
                 except Exception as e:
                     qualifications = None
-                    print(f"Error retrieving qualifications for job {i + 1} ")
+                    print(f"No qualifications for job {i + 1} ")
 
                 try:
                     company_name_elements = self.driver.find_elements(By.XPATH, "(//span[@data-testid='detailText'])[1]")
                     company_name = company_name_elements[0].text if company_name_elements else None
                 except Exception as e:
                     company_name = None
-                    print(f"Error retrieving company name for the job: {e}")
+                    print(f"No company name for the job: {e}")
                 try:
                     job_title_element = self.driver.find_element(By.XPATH, "//h2[@data-testid='viewJobTitle']")
                     job_title = job_title_element.text
                 except Exception as e:
                     job_title = None
-                    print(f"Error retrieving job_title for job  ")
+                    print(f"No job_title for job  ")
 
                 job_description = self.driver.find_element(By.XPATH, "//div[@data-testid='viewJobBodyJobFullDescriptionContent']").text
 
@@ -106,7 +106,6 @@ class Scrapper:
 
                 page_data_list.append(page_data)
                 print(f"Scraped job: {i + 1}")                
-
             except Exception as e:
                 print(f"Error scraping job {i + 1}: {e}")
 
