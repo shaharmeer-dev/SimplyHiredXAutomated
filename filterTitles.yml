@@ -1,9 +1,9 @@
 job_titles:
   - "Ruby"
-  - "AI"
   - "ML"
-  # - "Computer Vision"
-  # - "Ruby"
+  - "UI"
+  - "Computer Vision"
+  - "AI"
   # - "Web designer"
   # - "Python"
   # - "UX Designer"

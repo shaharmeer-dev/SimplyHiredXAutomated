@@ -56,7 +56,6 @@ class Scrapper:
                     job_type = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobDetailsJobType']//span[@data-testid='detailText']").text
                 except Exception as e:
                     job_type = None
-                    print(f"No job type for job {i + 1} ")
 
                 try:
                     compensation = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobCompensation']//span[@data-testid='detailText']").text
