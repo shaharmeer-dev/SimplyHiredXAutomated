@@ -18,5 +18,8 @@ print(filter_titles)
 
 
 for title in filter_titles:
-    i.scrape_jobs_with_title(title)
-
+    try:
+        i.scrape_jobs_with_title(title)
+    except Exception as e:
+        print(f"Error occurred for {title}: {e}")
+        continue
