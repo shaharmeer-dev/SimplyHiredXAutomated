@@ -12,7 +12,7 @@ from selenium.webdriver.common.keys import Keys  # Import Keys for pressing "Ent
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-import yaml
+import logging
 
 class Scrapper:
     
@@ -22,6 +22,9 @@ class Scrapper:
         """
         self.chrome_options = uc.ChromeOptions()
         self.chrome_options.add_argument("--start-maximized")
+        self.chrome_options.add_argument("--window-size=1366,768")
+        self.chrome_options.add_argument("--window-position=0,0") 
+
         self.chrome_options.add_argument(
             r"--user-data-dir=C:\Users\shaha\AppData\Local\Google\Chrome\User Data\Profile 1"
         )
@@ -29,6 +32,8 @@ class Scrapper:
             service=Service(ChromeDriverManager().install()),
             options=self.chrome_options
         )
+        self.logger = logging.getLogger(__name__)
+        
     @staticmethod
     def random_sleep(low: float = 3.0, high: float = 5.0) -> None:
         time.sleep(random.uniform(low, high))
@@ -61,33 +66,33 @@ class Scrapper:
                     compensation = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobCompensation']//span[@data-testid='detailText']").text
                 except Exception as e:
                     compensation = None
-                    print(f"No compensation for job {i + 1} ")
+                    self.logger.info(f"No compensation for job {i + 1} ")
 
                 try:
                     posted_time = self.driver.find_element(By.XPATH, "//span[@data-testid='viewJobBodyJobPostingTimestamp']//span[@data-testid='detailText']").text
                 except Exception as e:
                     posted_time = None
-                    print(f"No posted time for job {i + 1} ")
+                    self.logger.info(f"No posted time for job {i + 1} ")
 
                 try:
                     qualifications = self.driver.find_elements(By.XPATH, "//ul[@class='chakra-wrap__list css-19lo6pj']//li[@class='chakra-wrap__listitem css-1yp4ln']//span[@data-testid='viewJobQualificationItem']")
                     qualifications = [qualification.text for qualification in qualifications]
                 except Exception as e:
                     qualifications = None
-                    print(f"No qualifications for job {i + 1} ")
+                    self.logger.info(f"No qualifications for job {i + 1} ")
 
                 try:
                     company_name_elements = self.driver.find_elements(By.XPATH, "(//span[@data-testid='detailText'])[1]")
                     company_name = company_name_elements[0].text if company_name_elements else None
                 except Exception as e:
                     company_name = None
-                    print(f"No company name for the job: {e}")
+                    self.logger.info(f"No company name for the job: {e}")
                 try:
                     job_title_element = self.driver.find_element(By.XPATH, "//h2[@data-testid='viewJobTitle']")
                     job_title = job_title_element.text
                 except Exception as e:
                     job_title = None
-                    print(f"No job_title for job  ")
+                    self.logger.info(f"No job_title for job  ")
 
                 job_description = self.driver.find_element(By.XPATH, "//div[@data-testid='viewJobBodyJobFullDescriptionContent']").text
 
@@ -104,9 +109,9 @@ class Scrapper:
                 }
 
                 page_data_list.append(page_data)
-                print(f"Scraped job: {i + 1}")                
+                self.logger.info(f"Scraped job: {i + 1}")                
             except Exception as e:
-                print(f"Error scraping job {i + 1}: {e}")
+                self.logger.error(f"Error scraping job {i + 1}: {e}")
 
         return page_data_list
 
@@ -163,7 +168,7 @@ class Scrapper:
                         try:
                             job_elements = self.driver.find_elements(By.XPATH, "//li[@class='css-0']")
                             if not job_elements:
-                                print("No job elements found on the page.")
+                                self.logger.info("No job elements found on the page.")
                                 break
 
                             page_data = self.scrape_page(job_elements)
@@ -172,7 +177,7 @@ class Scrapper:
 
 
                         except Exception as e:
-                            print(f"An error occurred: {e}")
+                            self.logger.error(f"An error occurred: {e}")
                             break
                         break
                     try:
@@ -180,7 +185,7 @@ class Scrapper:
                         i+=1
                         time.sleep(5)
                     except Exception :
-                        print("All pages have been scraped: ")
+                        self.logger.info("All pages have been scraped: ")
 
                         break
                 except Exception as e:
